@@ -1,0 +1,6 @@
+http://data.parliament.uk/EDMi/EDMi.svc/List?topic={topicid}&EdmContains="{search phrase}"
+foreach edm result
+    display title, motion text
+    http://data.parliament.uk/EDMi/EDMi.svc/{id}/Signature/List
+    display each signatory linked to parliament biography
+    
