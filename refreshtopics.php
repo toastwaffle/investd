@@ -1,25 +1,14 @@
 <?php
-header("Content-type: application/xml");
+$fh = fopen("topics.txt","w");
 $url = "http://data.parliament.uk/EDMi/EDMi.svc/Topic/List";
-$oldxml = new XMLReader();
-$oldxml->open($url);
-$writer = new XMLWriter;
-$writer->openURI('php://output');
-$writer->startDocument('1.0', 'UTF-8');
-
-$writer->startElement('topics');
-    $lastid = null;
-    while ($oldxml->read()) {
-        if (($oldxml->name === 'Topic') && ($oldxml->getAttribute('id') != $lastid)) {
-            $writer->startElement('topic');
-                $writer->startAttribute('id');
-                    $writer->text($oldxml->getAttribute('id'));
-                $writer->endAttribute();
-                $writer->text($oldxml->readString());
-            $writer->endElement();
-            $lastid = $oldxml->getAttribute('id');
-        }
+$xml = new XMLReader();
+$xml->open($url);
+$lastid = null;
+while ($xml->read()) {
+    if (($xml->name === 'Topic') && ($xml->getAttribute('id') != $lastid)) {
+        fwrite($fh,"<option value=\"".$xml->getAttribute('id')."\">".$xml->readString()."</option>".PHP_EOL);
+        $lastid = $xml->getAttribute('id');
     }
-$writer->endElement();
-$writer->endDocument();
+}
+fclose($fh);
 ?>
