@@ -33,7 +33,7 @@ if (isset($_POST['searchterm'])) {
 TEXT;
     echo($text.PHP_EOL);
     if (strpos($_POST['searchterm']," ") !== False) {
-        $searchterm = '"'.$_POST['searchterm'].'"';
+        $searchterm = str_replace(" ","+",'"'.$_POST['searchterm'].'"');
     } else {
         $searchterm = $_POST['searchterm'];
     }
@@ -88,6 +88,7 @@ TEXT;
 </form>
 <?php
 } elseif (isset($_POST['message'])) {
+    echo('<p class="small right"><a href="index.php">New Search</a></p>');
     if (!file_exists("MPs.json")) {
         include("refreshmps.php");
     }
@@ -95,9 +96,13 @@ TEXT;
     $json = fread($fh,filesize("MPs.json"));
     $MPs = json_decode($json,True);
     fclose($fh);
+    $ids = array();
     for ($i = 1; $i <= $_POST['mpscount']; $i++) {
         if (isset($_POST['mp'.$i])) {
-            sendemail($MPs[$_POST['mp'.$i]]['email'],$_POST['subject'],$_POST['message'],"From: ".$_POST['name']." <".$_POST['email'].">");
+            if (!in_array($_POST['mp'.$i],$ids)) {
+                sendemail($MPs[$_POST['mp'.$i]]['email'],$_POST['subject'],$_POST['message'],"From: ".$_POST['name']." <".$_POST['email'].">");
+                $ids[] = $_POST['mp'.$i];
+            }
         }
     }
 } else {
@@ -127,6 +132,6 @@ fclose($fh);
 <div class="footer center">
 <hr />
 <p>This system caches MP and Topic data to reduce running time, but does not automatically update them. If you would like to update the data, <a href="refreshmps.php">click here to refresh MPs data</a> or <a href="refreshtopics.php">click here to refresh topic data</a>. Be warned that this may take up to 2 minutes to complete</p>
-<p>Samuel Littley for RSParly</p>
+<p>Created by Samuel Littley for RSParly</p>
 </body>
 </html>
