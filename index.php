@@ -127,6 +127,6 @@ fclose($fh);
 <div class="footer center">
 <hr />
 <p>This system caches MP and Topic data to reduce running time, but does not automatically update them. If you would like to update the data, <a href="refreshmps.php">click here to refresh MPs data</a> or <a href="refreshtopics.php">click here to refresh topic data</a>. Be warned that this may take up to 2 minutes to complete</p>
-<p>&copy; 2011 Samuel Littley for RSParly</p>
+<p>Samuel Littley for RSParly</p>
 </body>
 </html>
